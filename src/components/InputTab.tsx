@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
-import { UploadCloud, FileType, CheckCircle, Zap } from 'lucide-react';
+import { UploadCloud, FileType, CheckCircle } from 'lucide-react';
 
 export default function InputTab() {
   const { 

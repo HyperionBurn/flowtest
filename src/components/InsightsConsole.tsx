@@ -3,11 +3,16 @@ import { useAppStore } from '../store/useAppStore';
 import { Bot } from 'lucide-react';
 
 export default function InsightsConsole() {
-  const { severity, velocity } = useAppStore();
+  const { severity, velocity, backendResults } = useAppStore();
 
-  const s = severity / 100.0;
-  const baseDrop = Math.pow(s, 2) * (velocity / 0.25) * 0.45;
-  const ffr = Math.max(0.40, 1.0 - baseDrop);
+  let ffr = 0;
+  if (backendResults && backendResults.results) {
+    ffr = backendResults.results.min_ffr_value;
+  } else {
+    const s = severity / 100.0;
+    const baseDrop = Math.pow(s, 2) * (velocity / 0.25) * 0.45;
+    ffr = Math.max(0.40, 1.0 - baseDrop);
+  }
 
   const isIschemic = ffr <= 0.80;
 

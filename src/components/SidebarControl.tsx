@@ -7,7 +7,8 @@ export default function SidebarControl() {
   const { 
     patientId, age, bp, severity, velocity, sex, totalCholesterol, hdl, isSmoker, hasDiabetes,
     setAge, setSex, setBp, setTotalCholesterol, setHdl, setIsSmoker, setHasDiabetes,
-    setSeverity, setVelocity, dicomUploaded, setDicomUploaded, dicomImageUrl, setDicomImageUrl, startExecution, isExecuting
+    setSeverity, setVelocity, dicomUploaded, setDicomUploaded, dicomImageUrl, setDicomImageUrl,
+    dicomFile, setDicomFile, startExecution, updateExecutionProgress, finishExecution, isExecuting
   } = useAppStore();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -24,6 +25,7 @@ export default function SidebarControl() {
       if (metadata.age) setAge(metadata.age);
       if (metadata.sex) setSex(metadata.sex);
       if (metadata.imageUrl) setDicomImageUrl(metadata.imageUrl);
+      setDicomFile(file);
       setDicomUploaded(true);
     } else {
       setDicomError(metadata.error || 'Failed to parse DICOM file');
@@ -195,7 +197,37 @@ export default function SidebarControl() {
       {/* Execution Button anchored at bottom */}
       <div className="p-6 border-t border-border-dark bg-[#121212]">
         <button 
-          onClick={startExecution}
+          onClick={async () => {
+            if (!dicomFile) return;
+            startExecution();
+            
+            try {
+              const formData = new FormData();
+              formData.append("file", dicomFile);
+
+              updateExecutionProgress(20, "Uploading to FastAPI Engine...");
+              
+              const res = await fetch("http://localhost:8000/api/v1/analyze-scan", {
+                method: "POST",
+                body: formData
+              });
+              
+              if (!res.ok) throw new Error("Backend connection failed");
+              
+              updateExecutionProgress(60, "Running AI Inference (Navier-Stokes)...");
+              const data = await res.json();
+              
+              updateExecutionProgress(90, "Compiling Mesh Results...");
+              setTimeout(() => {
+                finishExecution(data);
+              }, 800);
+
+            } catch (err) {
+              console.error(err);
+              updateExecutionProgress(100, "Backend Connection Failed (Check Localhost)");
+              setTimeout(() => finishExecution(null), 1500);
+            }
+          }}
           disabled={!dicomUploaded || isExecuting}
           className={`relative overflow-hidden w-full font-light tracking-[0.2em] py-4 rounded-xl flex items-center justify-center gap-3 text-sm transition-all duration-500 uppercase group ${
             !dicomUploaded ? 'bg-gray-900 border border-gray-800 text-gray-600 cursor-not-allowed' :

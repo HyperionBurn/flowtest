@@ -4,9 +4,10 @@ type ViewMode = 'ffr' | 'velocity' | 'pressure';
 type AppPhase = 'input' | 'simulation';
 
 interface AppState {
-  activePhase: AppPhase;
+  activePhase: 'input' | 'simulation';
   dicomUploaded: boolean;
   dicomImageUrl: string | null;
+  dicomFile: File | null;
   
   // Patient / AHA PREVENT Data
   patientId: string;
@@ -21,15 +22,19 @@ interface AppState {
   // Simulation Controls
   severity: number;
   velocity: number;
-  mode: ViewMode;
+  mode: 'ffr' | 'velocity' | 'pressure';
   isExecuting: boolean;
   pipelineProgress: number;
   pipelineStatus: string;
   
+  // Backend Results
+  backendResults: any | null;
+  
   // Actions
-  setPhase: (phase: AppPhase) => void;
+  setPhase: (phase: 'input' | 'simulation') => void;
   setDicomUploaded: (val: boolean) => void;
   setDicomImageUrl: (val: string | null) => void;
+  setDicomFile: (val: File | null) => void;
   setPatientId: (val: string) => void;
   setAge: (val: number) => void;
   setSex: (val: 'M' | 'F') => void;
@@ -41,9 +46,11 @@ interface AppState {
 
   setSeverity: (severity: number) => void;
   setVelocity: (velocity: number) => void;
-  setMode: (mode: ViewMode) => void;
+  setMode: (mode: 'ffr' | 'velocity' | 'pressure') => void;
   
   startExecution: () => void;
+  updateExecutionProgress: (progress: number, msg: string) => void;
+  finishExecution: (results: any) => void;
   resetExecution: () => void;
 }
 
@@ -51,6 +58,7 @@ export const useAppStore = create<AppState>((set) => ({
   activePhase: 'input',
   dicomUploaded: false,
   dicomImageUrl: null,
+  dicomFile: null,
   
   patientId: 'CAD-9842-PREVENT',
   age: 62,
@@ -67,10 +75,12 @@ export const useAppStore = create<AppState>((set) => ({
   isExecuting: false,
   pipelineProgress: 0,
   pipelineStatus: 'Initializing Tensor Cores...',
+  backendResults: null,
 
   setPhase: (activePhase) => set({ activePhase }),
   setDicomUploaded: (dicomUploaded) => set({ dicomUploaded }),
   setDicomImageUrl: (dicomImageUrl) => set({ dicomImageUrl }),
+  setDicomFile: (dicomFile) => set({ dicomFile }),
   setPatientId: (patientId) => set({ patientId }),
   setAge: (age) => set({ age }),
   setSex: (sex) => set({ sex }),
@@ -85,32 +95,16 @@ export const useAppStore = create<AppState>((set) => ({
   setMode: (mode) => set({ mode }),
 
   startExecution: () => {
-    set({ isExecuting: true, pipelineProgress: 0, pipelineStatus: 'Initializing Tensor Cores...' });
-    
-    const stages = [
-      { p: 25, msg: "Ingesting Multimodal Patient CCTA DICOM Clusters..." },
-      { p: 50, msg: "Running Convolutional Attention U-Net Segmentation Sub-layers..." },
-      { p: 75, msg: "Compiling Continuous Mesh-Free Point Clouds (Ω Domains)..." },
-      { p: 100, msg: "Evaluating Navier-Stokes Loss Minimization via Graph Autodiff..." }
-    ];
-
-    let currentStage = 0;
-    
-    const runNextStage = () => {
-      if (currentStage >= stages.length) {
-        setTimeout(() => {
-          set({ isExecuting: false, activePhase: 'simulation' });
-        }, 600);
-        return;
-      }
-      const stage = stages[currentStage];
-      set({ pipelineProgress: stage.p, pipelineStatus: stage.msg });
-      currentStage++;
-      setTimeout(runNextStage, 600);
-    };
-
-    setTimeout(runNextStage, 400);
+    set({ isExecuting: true, pipelineProgress: 0, pipelineStatus: 'Uploading DICOM to FastAPI Engine...' });
+  },
+  
+  updateExecutionProgress: (pipelineProgress, pipelineStatus) => {
+    set({ pipelineProgress, pipelineStatus });
   },
 
-  resetExecution: () => set({ isExecuting: false, pipelineProgress: 0, activePhase: 'input', dicomUploaded: false })
+  finishExecution: (results) => {
+    set({ isExecuting: false, activePhase: 'simulation', backendResults: results, pipelineProgress: 100 });
+  },
+
+  resetExecution: () => set({ isExecuting: false, pipelineProgress: 0, activePhase: 'input', dicomUploaded: false, dicomFile: null, backendResults: null })
 }));

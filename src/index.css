@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --color-canvas-dark: #121212;
+  --color-panel-dark: #1c1c1f;
+  --color-border-dark: #2d2d30;
+  
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  
+  --color-accent-blue: #0ea5e9;
+  --color-accent-amber: #f59e0b;
+  --color-accent-red: #ef4444;
+  --color-accent-emerald: #10b981;
+}
+
+@layer base {
+  body { 
+    @apply font-sans bg-canvas-dark text-text-primary overflow-hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Custom scrollbar for sleekness */
+  ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+      background: transparent; 
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #1f293d; 
+      border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+      background: #374151; 
+  }
+
+  /* Custom Range Slider Styling */
+  input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+  }
+  input[type=range]:focus {
+      outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: #0ea5e9;
+      cursor: pointer;
+      margin-top: -6px;
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.6);
+      transition: transform 0.1s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: #1f293d;
+      border-radius: 2px;
+  }
+
+  /* Glow effects */
+  .glow-button {
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+      transition: all 0.3s ease;
+  }
+  .glow-button:hover {
+      box-shadow: 0 0 30px rgba(14, 165, 233, 0.6);
+      transform: translateY(-1px);
+  }
+  
+  .glow-text-red {
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  }
+}

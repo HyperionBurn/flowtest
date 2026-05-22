@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Cpu } from 'lucide-react';
+import { Activity, Cpu, Sparkles } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 export default function Navbar() {
@@ -17,6 +17,10 @@ export default function Navbar() {
           <NavLink to="/" className={({isActive}) => `px-4 py-2 rounded-md text-sm font-light tracking-wide transition-colors ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Dashboard</NavLink>
           <NavLink to="/cohort" className={({isActive}) => `px-4 py-2 rounded-md text-sm font-light tracking-wide transition-colors ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Patient Cohort</NavLink>
           <NavLink to="/diagnostics" className={({isActive}) => `px-4 py-2 rounded-md text-sm font-light tracking-wide transition-colors ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>System Diagnostics</NavLink>
+          <NavLink to="/presentation" className={({isActive}) => `px-4 py-2 rounded-md text-sm font-light tracking-wide transition-all duration-300 flex items-center gap-1.5 ${isActive ? 'bg-canvas-dark text-cyan-400 border border-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.15)]' : 'text-gray-400 hover:text-white'}`}>
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+            <span>Pitch Deck</span>
+          </NavLink>
         </nav>
       </div>
 

@@ -4,11 +4,13 @@ import { UploadCloud, CheckCircle, Zap, Activity, FileDigit, SlidersHorizontal, 
 import { extractDicomMetadata } from '../utils/dicomEngine';
 
 export default function SidebarControl() {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
   const { 
-    patientId, age, bp, severity, velocity, sex, totalCholesterol, hdl, isSmoker, hasDiabetes,
+    age, bp, severity, velocity, sex, totalCholesterol, hdl, isSmoker, hasDiabetes,
     setAge, setSex, setBp, setTotalCholesterol, setHdl, setIsSmoker, setHasDiabetes,
     setSeverity, setVelocity, dicomUploaded, setDicomUploaded, dicomImageUrl, setDicomImageUrl,
-    dicomFile, setDicomFile, startExecution, updateExecutionProgress, finishExecution, isExecuting
+    dicomFile, setDicomFile, startExecution, updateExecutionProgress, setBackendResults, finishExecution, isExecuting
   } = useAppStore();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -204,27 +206,36 @@ export default function SidebarControl() {
             try {
               const formData = new FormData();
               formData.append("file", dicomFile);
+              formData.append("patient_age", String(age));
+              formData.append("patient_sex", sex);
+              formData.append("bp_systolic", String(bp));
+              formData.append("total_cholesterol", String(totalCholesterol));
+              formData.append("hdl", String(hdl));
+              formData.append("is_smoker", String(isSmoker));
+              formData.append("has_diabetes", String(hasDiabetes));
+              formData.append("lesion_severity", String(severity));
+              formData.append("aortic_velocity", String(velocity));
 
-              updateExecutionProgress(20, "Uploading to FastAPI Engine...");
+              updateExecutionProgress(20, "Uploading to Physics Engine...");
               
-              const res = await fetch("http://localhost:8000/api/v1/analyze-scan", {
+              const res = await fetch(`${API_URL}/api/v1/analyze-scan`, {
                 method: "POST",
                 body: formData
               });
               
-              if (!res.ok) throw new Error("Backend connection failed");
+              if (!res.ok) throw new Error(`Backend error: ${res.status}`);
               
-              updateExecutionProgress(60, "Running AI Inference (Navier-Stokes)...");
+              updateExecutionProgress(60, "Running Navier-Stokes Solver...");
               const data = await res.json();
               
-              updateExecutionProgress(90, "Compiling Mesh Results...");
+              updateExecutionProgress(90, "Compiling Results...");
               setTimeout(() => {
-                finishExecution(data);
+                setBackendResults(data);
               }, 800);
 
             } catch (err) {
               console.error(err);
-              updateExecutionProgress(100, "Backend Connection Failed (Check Localhost)");
+              updateExecutionProgress(100, "Backend Connection Failed");
               setTimeout(() => finishExecution(null), 1500);
             }
           }}

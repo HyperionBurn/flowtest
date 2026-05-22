@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import ArteryModel from './ArteryModel';
 import { useAppStore } from '../store/useAppStore';
-import PipelineOverlay from './PipelineOverlay';
+import PinnController from './PinnController';
 
 export default function Viewport3D() {
   const { mode, setMode } = useAppStore();
@@ -48,6 +48,9 @@ export default function Viewport3D() {
           maxDistance={120} 
         />
       </Canvas>
+
+      {/* Timeline Scrubbing Overlay */}
+      <PinnController />
     </div>
   );
 }

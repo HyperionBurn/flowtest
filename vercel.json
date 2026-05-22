@@ -1,3 +1,3 @@
 {
-  "buildCommand": "vite build"
+  "buildCommand": "NODE_OPTIONS=--max-old-space-size=4096 vite build"
 }

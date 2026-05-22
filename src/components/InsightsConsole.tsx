@@ -5,7 +5,7 @@ import { Bot } from 'lucide-react';
 export default function InsightsConsole() {
   const { severity, velocity, backendResults } = useAppStore();
 
-  let ffr = 0;
+  let ffr: number;
   if (backendResults && backendResults.results) {
     ffr = backendResults.results.min_ffr_value;
   } else {

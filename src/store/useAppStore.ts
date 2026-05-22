@@ -1,7 +1,60 @@
 import { create } from 'zustand';
 
-type ViewMode = 'ffr' | 'velocity' | 'pressure';
-type AppPhase = 'input' | 'simulation';
+export interface CurvePoint {
+  x: number;
+  value: number;
+}
+
+export interface PinnTrainingSnapshot {
+  epoch: number;
+  loss: number;
+  pde_loss: number;
+  floor_loss: number;
+  min_ffr: number;
+  ffr_curve: number[];
+  pressure_curve: number[];
+  velocity_curve: number[];
+  residual: number;
+}
+
+export interface DicomMetadata {
+  patient_id?: string;
+  patient_age?: number;
+  patient_sex?: string;
+  slice_count?: number;
+}
+
+export interface PatientClinicalData {
+  age: number;
+  sex: string;
+  bp_systolic: number;
+  total_cholesterol: number;
+  hdl: number;
+  is_smoker: boolean;
+  has_diabetes: boolean;
+  lesion_severity: number;
+  aortic_velocity: number;
+}
+
+export interface SimulationResults {
+  min_ffr_value: number;
+  stenosis_location: number;
+  ffr_curve: CurvePoint[];
+  velocity_curve: CurvePoint[];
+  pressure_curve: CurvePoint[];
+  mesh_nodes_calculated: number;
+  pinn_residual: number;
+  training_history: PinnTrainingSnapshot[] | null;
+}
+
+export interface AnalyzeResponse {
+  success: boolean;
+  results: SimulationResults;
+  metadata: DicomMetadata;
+  clinical: PatientClinicalData;
+  processing_time_sec: number;
+  error?: string | null;
+}
 
 interface AppState {
   activePhase: 'input' | 'simulation';
@@ -28,7 +81,11 @@ interface AppState {
   pipelineStatus: string;
   
   // Backend Results
-  backendResults: any | null;
+  backendResults: AnalyzeResponse | null;
+  pinnHistory: PinnTrainingSnapshot[] | null;
+  currentPlaybackEpoch: number;
+  isPlaybackPlaying: boolean;
+  playbackSpeed: number;
   
   // Actions
   setPhase: (phase: 'input' | 'simulation') => void;
@@ -48,9 +105,15 @@ interface AppState {
   setVelocity: (velocity: number) => void;
   setMode: (mode: 'ffr' | 'velocity' | 'pressure') => void;
   
+  setPinnHistory: (history: PinnTrainingSnapshot[] | null) => void;
+  setCurrentPlaybackEpoch: (epoch: number) => void;
+  setIsPlaybackPlaying: (val: boolean) => void;
+  setPlaybackSpeed: (val: number) => void;
+  
   startExecution: () => void;
   updateExecutionProgress: (progress: number, msg: string) => void;
-  finishExecution: (results: any) => void;
+  setBackendResults: (results: AnalyzeResponse) => void;
+  finishExecution: (results: AnalyzeResponse) => void;
   resetExecution: () => void;
 }
 
@@ -76,6 +139,10 @@ export const useAppStore = create<AppState>((set) => ({
   pipelineProgress: 0,
   pipelineStatus: 'Initializing Tensor Cores...',
   backendResults: null,
+  pinnHistory: null,
+  currentPlaybackEpoch: 200,
+  isPlaybackPlaying: false,
+  playbackSpeed: 50,
 
   setPhase: (activePhase) => set({ activePhase }),
   setDicomUploaded: (dicomUploaded) => set({ dicomUploaded }),
@@ -94,6 +161,11 @@ export const useAppStore = create<AppState>((set) => ({
   setVelocity: (velocity) => set({ velocity }),
   setMode: (mode) => set({ mode }),
 
+  setPinnHistory: (pinnHistory) => set({ pinnHistory }),
+  setCurrentPlaybackEpoch: (currentPlaybackEpoch) => set({ currentPlaybackEpoch }),
+  setIsPlaybackPlaying: (isPlaybackPlaying) => set({ isPlaybackPlaying }),
+  setPlaybackSpeed: (playbackSpeed) => set({ playbackSpeed }),
+
   startExecution: () => {
     set({ isExecuting: true, pipelineProgress: 0, pipelineStatus: 'Uploading DICOM to FastAPI Engine...' });
   },
@@ -102,9 +174,36 @@ export const useAppStore = create<AppState>((set) => ({
     set({ pipelineProgress, pipelineStatus });
   },
 
-  finishExecution: (results) => {
-    set({ isExecuting: false, activePhase: 'simulation', backendResults: results, pipelineProgress: 100 });
+  setBackendResults: (results) => {
+    const history = results?.results?.training_history || null;
+    set({
+      backendResults: results,
+      pinnHistory: history
+    });
   },
 
-  resetExecution: () => set({ isExecuting: false, pipelineProgress: 0, activePhase: 'input', dicomUploaded: false, dicomFile: null, backendResults: null })
+  finishExecution: (results) => {
+    const history = results?.results?.training_history || null;
+    const finalEpoch = history ? history[history.length - 1].epoch : 200;
+    set({ 
+      isExecuting: false, 
+      activePhase: 'simulation', 
+      backendResults: results, 
+      pinnHistory: history,
+      currentPlaybackEpoch: finalEpoch,
+      pipelineProgress: 100 
+    });
+  },
+
+  resetExecution: () => set({ 
+    isExecuting: false, 
+    pipelineProgress: 0, 
+    activePhase: 'input', 
+    dicomUploaded: false, 
+    dicomFile: null, 
+    backendResults: null,
+    pinnHistory: null,
+    currentPlaybackEpoch: 200,
+    isPlaybackPlaying: false
+  })
 }));

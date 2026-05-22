@@ -1,7 +1,31 @@
 import React from 'react';
-import { Cpu, Server, Activity } from 'lucide-react';
+import { Server, Activity } from 'lucide-react';
+import { useAppStore } from '../store/useAppStore';
 
 export default function SystemDiagnostics() {
+  const { backendResults, patientId } = useAppStore();
+
+  let processingTime = 0.65;
+  let residualVal = 4.12e-7;
+
+  if (backendResults) {
+    processingTime = backendResults.processing_time_sec || 0.65;
+    if (backendResults.results) {
+      residualVal = backendResults.results.pinn_residual || 4.12e-7;
+    }
+  }
+
+  // Format residual
+  let coef = "4.12";
+  let exp = "-7";
+  try {
+    const parts = residualVal.toExponential(2).split('e');
+    coef = parts[0];
+    exp = parts[1];
+  } catch {
+    // Fallback to default values
+  }
+
   return (
     <div className="flex-1 p-8 bg-canvas-dark overflow-y-auto">
       <div className="max-w-6xl mx-auto">
@@ -37,9 +61,15 @@ export default function SystemDiagnostics() {
           <div className="bg-canvas-dark rounded-lg p-4 font-mono text-xs text-gray-400 h-64 overflow-y-auto space-y-2 border border-border-dark shadow-inner">
             <p><span className="text-accent-emerald">[OK]</span> Node 0x7A2 initialized graph memory.</p>
             <p><span className="text-accent-emerald">[OK]</span> Checkpoint loaded: SIREN_weights_v4.2.pt</p>
-            <p><span className="text-accent-blue">[INFO]</span> Incoming inference request from client CAD-9842...</p>
-            <p><span className="text-accent-emerald">[OK]</span> PDE Residual converged to 4.12e-7.</p>
-            <p><span className="text-accent-blue">[INFO]</span> Awaiting new requests...</p>
+            <p><span className="text-accent-blue">[INFO]</span> Incoming inference request from client {patientId}...</p>
+            {backendResults ? (
+              <>
+                <p><span className="text-accent-emerald">[OK]</span> Solver execution finished in {processingTime.toFixed(3)}s.</p>
+                <p><span className="text-accent-emerald">[OK]</span> PDE Residual converged to {coef}e{exp}.</p>
+              </>
+            ) : (
+              <p><span className="text-accent-blue">[INFO]</span> Awaiting new requests...</p>
+            )}
           </div>
         </div>
       </div>

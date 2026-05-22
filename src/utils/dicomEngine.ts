@@ -105,11 +105,12 @@ export const extractDicomMetadata = async (file: File): Promise<DicomMetadata> =
           success: true
         });
 
-      } catch (err: any) {
-        console.error("DICOM Parsing Error:", err);
+      } catch (err) {
+        const error = err as Error;
+        console.error("DICOM Parsing Error:", error);
         resolve({
           success: false,
-          error: err.message || "Invalid DICOM format or compressed pixel data unsupported."
+          error: error.message || "Invalid DICOM format or compressed pixel data unsupported."
         });
       }
     };

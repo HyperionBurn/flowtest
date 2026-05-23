@@ -18,7 +18,7 @@ export default function PipelineOverlay() {
       setIsTraining(false);
       setCurrentPlaybackEpoch(0);
       setLogs([
-        "[SYSTEM] Handshaking with local NVIDIA Modulus API...",
+        "[SYSTEM] Handshaking with local NavierAgent GNN solver...",
         "[SYSTEM] Parsing upload DICOM binary stream...",
         "[DICOM] Extracted metadata successfully."
       ]);

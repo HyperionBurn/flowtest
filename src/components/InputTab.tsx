@@ -64,7 +64,7 @@ export default function InputTab() {
               <div className="flex flex-col items-center animate-in fade-in zoom-in duration-300">
                 <CheckCircle className="w-16 h-16 text-accent-emerald mb-4" />
                 <h3 className="text-lg font-bold text-text-primary">Scan Processed Successfully</h3>
-                <p className="text-sm text-text-secondary mt-1">Ready for Modulus Inference</p>
+                <p className="text-sm text-text-secondary mt-1">Ready for NavierAgent Inference</p>
                 <button onClick={() => setDicomUploaded(false)} className="mt-4 text-xs font-semibold text-accent-blue hover:underline">Upload a different scan</button>
               </div>
             ) : uploading ? (

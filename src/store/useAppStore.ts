@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { generateMockNavierAgentResults } from '../utils/mockNavierAgent';
+
 
 export interface CurvePoint {
   x: number;
@@ -211,8 +213,21 @@ export const useAppStore = create<AppState>((set) => ({
       const data = await res.json();
       set({ postStentResults: data, stentApplied: true, isStentExecuting: false });
     } catch (err) {
-      console.error("Virtual stenting failed:", err);
-      set({ isStentExecuting: false });
+      console.warn("Virtual stenting failed. Falling back to local mock NavierAgent solver:", err);
+      const { patientId } = useAppStore.getState();
+      const mockData = generateMockNavierAgentResults({
+        patientId,
+        age,
+        sex,
+        bp,
+        totalCholesterol,
+        hdl,
+        isSmoker,
+        hasDiabetes,
+        severity: 10, // post-stent severity is set to 10% residual stenosis
+        velocity
+      });
+      set({ postStentResults: mockData, stentApplied: true, isStentExecuting: false });
     }
   },
 

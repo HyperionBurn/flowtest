@@ -31,7 +31,7 @@ export default function SystemDiagnostics() {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
           <Server className="w-8 h-8 text-accent-blue" />
-          <h2 className="text-3xl font-bold">Modulus Infrastructure Status</h2>
+          <h2 className="text-3xl font-bold">NavierAgent Infrastructure Status</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
@@ -40,7 +40,7 @@ export default function SystemDiagnostics() {
               <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
             </div>
             <div className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Active GPU Nodes</div>
-            <div className="text-4xl font-light font-mono">128<span className="text-lg text-gray-500 ml-2">H100s</span></div>
+            <div className="text-4xl font-light font-mono">128<span className="text-lg text-gray-500 ml-2">MI300X</span></div>
           </div>
           
           <div className="bg-panel-dark border border-border-dark rounded-xl p-6 shadow-lg">

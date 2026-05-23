@@ -19,7 +19,7 @@ export default function Viewport3D() {
   } = useAppStore();
 
   return (
-    <div className="flex-1 min-h-[400px] lg:min-h-0 relative cursor-move bg-gradient-to-b from-canvas-dark to-[#0a0a0a] overflow-hidden">
+    <div className="flex-1 min-h-[400px] max-h-[60vh] lg:max-h-none lg:min-h-0 relative cursor-move bg-gradient-to-b from-canvas-dark to-[#0a0a0a] overflow-hidden">
       
       {/* Virtual Stenting Planner Console (visible after initial GNN results are back) */}
       {backendResults && (
@@ -100,7 +100,7 @@ export default function Viewport3D() {
       </div>
 
       {/* WebGL Canvas */}
-      <Canvas camera={{ position: [35, 20, 50], fov: 45 }} gl={{ antialias: true, alpha: true }}>
+      <Canvas camera={{ position: [35, 20, 50], fov: 45 }} gl={{ antialias: true, alpha: true }} style={{ touchAction: 'pan-y' }}>
         <color attach="background" args={['#121212']} />
         <fogExp2 attach="fog" args={['#121212', 0.015]} />
         <ambientLight intensity={0.5} />

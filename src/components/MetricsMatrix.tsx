@@ -43,7 +43,7 @@ export default function MetricsMatrix() {
   }
 
   return (
-    <div className="h-28 border-b border-border-dark grid grid-cols-4 divide-x divide-border-dark bg-canvas-dark shrink-0 relative z-10 shadow-lg">
+    <div className="h-auto md:h-28 border-b border-border-dark grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border-dark bg-canvas-dark shrink-0 relative z-10 shadow-lg">
       <div className="px-6 py-4 flex flex-col justify-center bg-gradient-to-b from-transparent to-panel-dark/20">
         <div className="text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">Global Pullback Min FFR</div>
         <div className="flex items-end gap-3">

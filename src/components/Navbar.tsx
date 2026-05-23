@@ -13,13 +13,13 @@ export default function Navbar() {
           </h1>
         </div>
         
-        <nav className="hidden md:flex items-center gap-1">
-          <NavLink to="/" className={({isActive}) => `px-4 py-2 rounded-md text-sm font-light tracking-wide transition-colors ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Dashboard</NavLink>
-          <NavLink to="/cohort" className={({isActive}) => `px-4 py-2 rounded-md text-sm font-light tracking-wide transition-colors ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Patient Cohort</NavLink>
-          <NavLink to="/diagnostics" className={({isActive}) => `px-4 py-2 rounded-md text-sm font-light tracking-wide transition-colors ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>System Diagnostics</NavLink>
-          <NavLink to="/presentation" className={({isActive}) => `px-4 py-2 rounded-md text-sm font-light tracking-wide transition-all duration-300 flex items-center gap-1.5 ${isActive ? 'bg-canvas-dark text-cyan-400 border border-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.15)]' : 'text-gray-400 hover:text-white'}`}>
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-            <span>Pitch Deck</span>
+        <nav className="flex items-center gap-1 overflow-x-auto max-w-[200px] sm:max-w-none no-scrollbar py-1 shrink-0">
+          <NavLink to="/" className={({isActive}) => `px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-light tracking-wide transition-colors shrink-0 ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Dashboard</NavLink>
+          <NavLink to="/cohort" className={({isActive}) => `px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-light tracking-wide transition-colors shrink-0 ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Cohort</NavLink>
+          <NavLink to="/diagnostics" className={({isActive}) => `px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-light tracking-wide transition-colors shrink-0 ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Diagnostics</NavLink>
+          <NavLink to="/presentation" className={({isActive}) => `px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-light tracking-wide transition-all duration-300 flex items-center gap-1.5 shrink-0 ${isActive ? 'bg-canvas-dark text-cyan-400 border border-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.15)]' : 'text-gray-400 hover:text-white'}`}>
+            <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse shrink-0" />
+            <span className="shrink-0">Pitch</span>
           </NavLink>
         </nav>
       </div>

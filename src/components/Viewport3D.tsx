@@ -9,7 +9,7 @@ export default function Viewport3D() {
   const { mode, setMode } = useAppStore();
 
   return (
-    <div className="flex-1 relative cursor-move bg-gradient-to-b from-canvas-dark to-[#0a0a0a] overflow-hidden">
+    <div className="flex-1 min-h-[400px] lg:min-h-0 relative cursor-move bg-gradient-to-b from-canvas-dark to-[#0a0a0a] overflow-hidden">
       
       {/* Tab Controls */}
       <div className="absolute top-6 right-6 z-10 flex p-1 bg-panel-dark/80 backdrop-blur-md border border-border-dark rounded-lg shadow-xl">

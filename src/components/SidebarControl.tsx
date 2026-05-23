@@ -63,7 +63,7 @@ export default function SidebarControl() {
   };
 
   return (
-    <aside className="w-[420px] bg-[#121212]/95 backdrop-blur-xl border-r border-border-dark flex flex-col h-full shrink-0 z-10 relative">
+    <aside className="w-full lg:w-[420px] bg-[#121212]/95 backdrop-blur-xl border-b lg:border-b-0 lg:border-r border-border-dark flex flex-col lg:h-full shrink-0 z-10 relative">
       <div className="p-8 flex-1 flex flex-col gap-10 overflow-y-auto custom-scrollbar font-light">
         
         {/* Module A: DICOM Input */}

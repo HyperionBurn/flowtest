@@ -17,7 +17,7 @@ export default function InsightsConsole() {
   const isIschemic = ffr <= 0.80;
 
   return (
-    <div className="h-40 bg-panel-dark border-t border-border-dark p-6 shrink-0 flex flex-col justify-center relative z-10 shadow-[0_-4px_24px_rgba(0,0,0,0.5)]">
+    <div className="h-auto min-h-[10rem] bg-panel-dark border-t border-border-dark p-6 shrink-0 flex flex-col justify-center relative z-10 shadow-[0_-4px_24px_rgba(0,0,0,0.5)]">
       <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
         <Bot className="w-4 h-4 text-accent-blue" /> Automated Clinical Insights Matrix
       </h3>

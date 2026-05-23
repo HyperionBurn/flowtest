@@ -92,76 +92,80 @@ export default function MetricsMatrix() {
 
   return (
     <div className="h-auto md:h-28 border-b border-border-dark grid grid-cols-2 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border-dark bg-canvas-dark shrink-0 relative z-10 shadow-lg">
-      <div className="px-6 py-4 flex flex-col justify-center bg-gradient-to-b from-transparent to-panel-dark/20 select-none">
-        <div className="text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">Global Pullback Min FFR</div>
+      <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col justify-center bg-gradient-to-b from-transparent to-panel-dark/20 select-none">
+        <div className="text-[10px] sm:text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">Global Pullback Min FFR</div>
         {stentApplied && postFfr !== null ? (
-          <div className="flex items-end gap-2.5">
-            <div className="text-3xl font-thin font-mono tracking-tighter text-gray-500 line-through">
-              {preFfr.toFixed(2)}
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <div className="flex items-center gap-1.5">
+              <span className="text-2xl sm:text-3xl font-thin font-mono text-gray-500 line-through">
+                {preFfr.toFixed(2)}
+              </span>
+              <span className="text-xs text-gray-600 font-light">&rarr;</span>
+              <span className="text-3xl sm:text-4xl font-thin font-mono text-accent-emerald tracking-tighter text-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                {postFfr.toFixed(2)}
+              </span>
             </div>
-            <div className="text-base text-gray-600 font-light pb-1">&rarr;</div>
-            <div className="text-4xl font-thin font-mono text-accent-emerald tracking-tighter text-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
-              {postFfr.toFixed(2)}
-            </div>
-            <div className="mb-1.5 px-2 py-0.5 rounded text-[10px] font-light uppercase tracking-widest bg-accent-emerald/20 text-accent-emerald border border-accent-emerald/30 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+            <div className="px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-light uppercase tracking-widest bg-accent-emerald/20 text-accent-emerald border border-accent-emerald/30 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
               +{ffrDelta.toFixed(2)} FFR
             </div>
           </div>
         ) : (
-          <div className="flex items-end gap-3">
-            <div className={`text-4xl font-thin font-mono tracking-tighter transition-colors duration-300 ${isIschemic ? 'text-accent-red text-shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'text-white'}`}>
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <div className={`text-3xl sm:text-4xl font-thin font-mono tracking-tighter transition-colors duration-300 ${isIschemic ? 'text-accent-red text-shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'text-white'}`}>
               {preFfr.toFixed(2)}
             </div>
-            <div className={`mb-1.5 px-2 py-0.5 rounded text-[10px] font-light uppercase tracking-widest border transition-all duration-300 ${isIschemic ? 'bg-accent-red/20 text-accent-red border-accent-red/50 glow-text-red' : 'bg-accent-emerald/20 text-accent-emerald border-accent-emerald/30 shadow-[0_0_10px_rgba(16,185,129,0.3)]'}`}>
+            <div className={`px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-light uppercase tracking-widest border transition-all duration-300 ${isIschemic ? 'bg-accent-red/20 text-accent-red border-accent-red/50 glow-text-red' : 'bg-accent-emerald/20 text-accent-emerald border-accent-emerald/30 shadow-[0_0_10px_rgba(16,185,129,0.3)]'}`}>
               {isIschemic ? 'Ischemic' : 'Stable Flow'}
             </div>
           </div>
         )}
       </div>
       
-      <div className="px-6 py-4 flex flex-col justify-center select-none">
-        <div className="text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">Turnaround Latency</div>
-        <div className="flex items-end gap-3">
-          <div className="text-4xl font-thin font-mono text-white tracking-tighter">
+      <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col justify-center select-none">
+        <div className="text-[10px] sm:text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">Turnaround Latency</div>
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <div className="text-3xl sm:text-4xl font-thin font-mono text-white tracking-tighter">
             {activeProcessingTime.toFixed(3)}
-            <span className="text-xl text-gray-500 font-light">s</span>
+            <span className="text-lg sm:text-xl text-gray-500 font-light">s</span>
           </div>
-          <div className="mb-1.5 px-2 py-0.5 rounded text-[10px] font-light uppercase tracking-widest bg-accent-emerald/20 text-accent-emerald border border-accent-emerald/30">
+          <div className="px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-light uppercase tracking-widest bg-accent-emerald/20 text-accent-emerald border border-accent-emerald/30">
             {stentApplied ? `-${latencyReductionPercent.toFixed(1)}% vs Pre` : "-99.8% Time"}
           </div>
         </div>
       </div>
  
-      <div className="px-6 py-4 flex flex-col justify-center select-none">
-        <div className="text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">PINN Physics Residual</div>
-        <div className="flex items-end gap-3">
-          <div className="text-4xl font-thin font-mono text-white tracking-tighter">
+      <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col justify-center select-none">
+        <div className="text-[10px] sm:text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">PINN Physics Residual</div>
+        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+          <div className="text-3xl sm:text-4xl font-thin font-mono text-white tracking-tighter">
             {coef}
-            <span className="text-xl text-gray-500 font-light">e{exp}</span>
+            <span className="text-lg sm:text-xl text-gray-500 font-light">e{exp}</span>
           </div>
-          <div className="mb-1.5 px-2 py-0.5 rounded text-[10px] font-light uppercase tracking-widest bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">Autodiff</div>
+          <div className="px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-light uppercase tracking-widest bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">Autodiff</div>
         </div>
       </div>
  
-      <div className="px-6 py-4 flex flex-col justify-center select-none">
-        <div className="text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">10-Yr MACE Risk Profile</div>
+      <div className="px-4 sm:px-6 py-3 sm:py-4 flex flex-col justify-center select-none">
+        <div className="text-[10px] sm:text-xs text-gray-500 mb-1.5 font-light tracking-widest uppercase">10-Yr MACE Risk Profile</div>
         {stentApplied && postRisk !== null ? (
-          <div className="flex items-end gap-2.5">
-            <div className="text-3xl font-thin font-mono tracking-tighter text-gray-500 line-through">
-              {preRisk.toFixed(1)}%
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <div className="flex items-center gap-1.5">
+              <span className="text-2xl sm:text-3xl font-thin font-mono text-gray-500 line-through">
+                {preRisk.toFixed(1)}%
+              </span>
+              <span className="text-xs text-gray-600 font-light">&rarr;</span>
+              <span className="text-3xl sm:text-4xl font-thin font-mono text-accent-emerald tracking-tighter">
+                {postRisk.toFixed(1)}%
+              </span>
             </div>
-            <div className="text-base text-gray-600 font-light pb-1">&rarr;</div>
-            <div className="text-4xl font-thin font-mono text-accent-emerald tracking-tighter">
-              {postRisk.toFixed(1)}%
-            </div>
-            <div className="mb-1.5 px-2 py-0.5 rounded text-[10px] font-light uppercase tracking-widest bg-accent-emerald/20 text-accent-emerald border border-accent-emerald/30 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+            <div className="px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-light uppercase tracking-widest bg-accent-emerald/20 text-accent-emerald border border-accent-emerald/30 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
               -{riskReductionPercent.toFixed(1)}% Risk
             </div>
           </div>
         ) : (
-          <div className="flex items-end gap-3">
-            <div className="text-4xl font-thin font-mono text-white tracking-tighter">{preRisk.toFixed(1)}<span className="text-xl text-gray-500 font-light">%</span></div>
-            <div className="mb-1.5 text-[10px] text-gray-500 font-mono font-light uppercase tracking-widest">ACC/AHA Calibrated</div>
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <div className="text-3xl sm:text-4xl font-thin font-mono text-white tracking-tighter">{preRisk.toFixed(1)}<span className="text-lg sm:text-xl text-gray-500 font-light">%</span></div>
+            <div className="px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] text-gray-500 font-mono font-light uppercase tracking-widest border border-border-dark bg-canvas-dark/40">AHA/ACC</div>
           </div>
         )}
       </div>

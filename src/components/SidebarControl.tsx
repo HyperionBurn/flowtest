@@ -63,7 +63,7 @@ export default function SidebarControl() {
   };
 
   return (
-    <aside className="w-full lg:w-[420px] bg-[#121212]/95 backdrop-blur-xl border-b lg:border-b-0 lg:border-r border-border-dark flex flex-col lg:h-full shrink-0 z-10 relative">
+    <aside className="w-full lg:w-[420px] bg-[#121212]/95 backdrop-blur-xl border-b lg:border-b-0 lg:border-r border-border-dark flex flex-col lg:h-full shrink-0 z-10 relative order-2 lg:order-1">
       <div className="p-8 flex-1 flex flex-col gap-10 overflow-y-auto custom-scrollbar font-light">
         
         {/* Module A: DICOM Input */}
@@ -145,7 +145,7 @@ export default function SidebarControl() {
             </h3>
           </div>
           
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 bg-[#1c1c1f] p-6 rounded-xl border border-border-dark shadow-inner">
+          <div className="grid grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-6 sm:gap-y-8 bg-[#1c1c1f] p-4 sm:p-6 rounded-xl border border-border-dark shadow-inner">
             
             {/* Standard Inputs */}
             <div className="relative">

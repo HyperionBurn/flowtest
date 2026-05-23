@@ -28,7 +28,7 @@ export default function Navbar() {
         <div className="text-[10px] font-mono text-gray-500 tracking-widest uppercase hidden md:block">
           2026 HSIL CLINICAL INTERFACE
         </div>
-        <div className="flex items-center gap-2.5 bg-canvas-dark border border-border-dark px-4 py-1.5 rounded-full shadow-inner">
+        <div className="flex items-center gap-2.5 bg-canvas-dark border border-border-dark px-4 py-1.5 rounded-full shadow-inner hidden sm:flex">
           <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
           <Cpu className="w-3 h-3 text-gray-400" />
           <span className="text-[10px] font-mono font-light text-gray-300 tracking-wider">NVIDIA Modulus Core Active</span>

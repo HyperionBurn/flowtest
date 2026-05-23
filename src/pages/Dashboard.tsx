@@ -10,7 +10,7 @@ export default function Dashboard() {
     <div className="flex-1 flex flex-col lg:flex-row w-full h-full overflow-y-auto lg:overflow-hidden">
       <PipelineOverlay />
       <SidebarControl />
-      <div className="flex-1 flex flex-col relative lg:h-full min-h-0">
+      <div className="flex-1 flex flex-col relative lg:h-full min-h-0 order-1 lg:order-2">
         <MetricsMatrix />
         <Viewport3D />
         <InsightsConsole />

@@ -90,8 +90,13 @@ async def analyze_scan(
         # Build normalized PyTorch graph data
         graph_data = build_graph_from_patient(patient_dict)
         
-        # Execute remote GPU inference
-        inference_result = run_remote_inference(graph_data)
+        # Execute remote GPU inference with local CPU fallback
+        try:
+            inference_result = run_remote_inference(graph_data)
+        except Exception as gpu_err:
+            print(f"[GPU Fallback] Remote GPU inference failed: {gpu_err}. Running local CPU GNN solver...")
+            from app.inference import run_local_inference
+            inference_result = run_local_inference(graph_data)
         
         # Extract features and shapes
         NX0 = graph_data['NX0']

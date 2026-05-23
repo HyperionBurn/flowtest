@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Cpu, Terminal, TrendingDown, Zap } from 'lucide-react';
 
 export default function PipelineOverlay() {
-  const { isExecuting, backendResults, finishExecution, pinnHistory } = useAppStore();
+  const { isExecuting, backendResults, finishExecution, pinnHistory, setCurrentPlaybackEpoch } = useAppStore();
   const [currentStep, setCurrentStep] = useState(0);
   const [isTraining, setIsTraining] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
@@ -16,6 +16,7 @@ export default function PipelineOverlay() {
     if (isExecuting) {
       setCurrentStep(0);
       setIsTraining(false);
+      setCurrentPlaybackEpoch(0);
       setLogs([
         "[SYSTEM] Handshaking with local NVIDIA Modulus API...",
         "[SYSTEM] Parsing upload DICOM binary stream...",
@@ -46,6 +47,7 @@ export default function PipelineOverlay() {
         if (step < history.length) {
           const snapshot = history[step];
           setCurrentStep(step);
+          setCurrentPlaybackEpoch(snapshot.epoch);
           
           // Append epoch telemetry to log console
           setLogs(prev => [

@@ -4,9 +4,9 @@ import Navbar from './Navbar';
 
 export default function Layout() {
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden">
+    <div className="flex flex-col min-h-screen lg:h-screen lg:w-screen lg:overflow-hidden">
       <Navbar />
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex lg:overflow-hidden">
         <Outlet />
       </div>
     </div>

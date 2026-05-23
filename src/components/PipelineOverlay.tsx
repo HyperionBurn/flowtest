@@ -122,13 +122,13 @@ export default function PipelineOverlay() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="fixed inset-0 bg-[#070708]/98 backdrop-blur-lg z-50 flex items-center justify-center p-6 select-none"
+          className="fixed inset-0 bg-[#070708]/98 backdrop-blur-lg z-50 flex items-center justify-center p-3 sm:p-6 select-none"
         >
           {/* Radiant background glow */}
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-          <div className="w-full max-w-5xl bg-[#111113] border border-[#232326] p-8 rounded-2xl shadow-2xl flex flex-col h-[650px] relative overflow-hidden">
+          <div className="w-full max-w-5xl bg-[#111113] border border-[#232326] p-4 sm:p-8 rounded-2xl shadow-2xl flex flex-col h-full max-h-[92vh] sm:max-h-[85vh] lg:h-[650px] relative overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border-dark pb-5 mb-6 shrink-0">
               <div className="flex items-center gap-3">
@@ -152,7 +152,7 @@ export default function PipelineOverlay() {
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 flex gap-6 min-h-0">
+            <div className="flex-1 flex flex-col lg:flex-row gap-4 lg:gap-6 min-h-0 overflow-y-auto lg:overflow-hidden">
               
               {/* Left Column: Log Terminal */}
               <div className="flex-1 flex flex-col bg-[#09090b] border border-[#1b1b1e] rounded-xl overflow-hidden shadow-inner">
@@ -180,9 +180,9 @@ export default function PipelineOverlay() {
               </div>
 
               {/* Right Column: Training Graphs & Telemetry */}
-              <div className="w-[400px] flex flex-col gap-6 shrink-0">
+              <div className="w-full lg:w-[400px] flex flex-col gap-4 lg:gap-6 shrink-0">
                 {/* Live Training Curves */}
-                <div className="bg-[#141417] border border-[#232326] p-5 rounded-xl flex flex-col h-[280px]">
+                <div className="bg-[#141417] border border-[#232326] p-4 sm:p-5 rounded-xl flex flex-col h-[280px]">
                   <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                     <TrendingDown className="w-3.5 h-3.5 text-cyan-400" /> Loss Convergence History
                   </h3>
@@ -190,7 +190,7 @@ export default function PipelineOverlay() {
                   {/* SVG Chart */}
                   <div className="flex-1 relative border-l border-b border-gray-800 bg-[#0a0a0c] rounded-lg p-2 overflow-hidden flex items-center justify-center">
                     {backendResults ? (
-                      <svg width="360" height="120" className="overflow-visible">
+                      <svg viewBox="0 0 360 120" className="w-full h-auto max-h-[120px] overflow-visible">
                         {/* Grids */}
                         <line x1="0" y1="30" x2="360" y2="30" stroke="#1f1f25" strokeDasharray="3,3" />
                         <line x1="0" y1="60" x2="360" y2="60" stroke="#1f1f25" strokeDasharray="3,3" />
@@ -274,8 +274,8 @@ export default function PipelineOverlay() {
             </div>
 
             {/* Bottom Progress & Control Bar */}
-            <div className="mt-6 border-t border-border-dark pt-5 flex items-center justify-between shrink-0">
-              <div className="flex-1 max-w-xl flex items-center gap-4">
+            <div className="mt-6 border-t border-border-dark pt-5 flex flex-col sm:flex-row gap-4 items-center justify-between shrink-0">
+              <div className="w-full sm:flex-1 max-w-xl flex items-center gap-4">
                 <span className="text-[10px] font-mono text-gray-500 tracking-widest uppercase shrink-0">Optimization:</span>
                 <div className="flex-1 h-1.5 bg-[#1b1b1e] rounded-full overflow-hidden border border-[#2b2b2f]">
                   <div 

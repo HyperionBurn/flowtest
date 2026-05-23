@@ -10,15 +10,15 @@ const mockPatients = [
 
 export default function PatientCohort() {
   return (
-    <div className="flex-1 p-8 bg-canvas-dark overflow-y-auto">
+    <div className="flex-1 p-4 sm:p-8 bg-canvas-dark overflow-y-auto">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
           <Users className="w-8 h-8 text-accent-blue" />
           <h2 className="text-3xl font-bold">Patient Cohort Analysis</h2>
         </div>
         
-        <div className="bg-panel-dark border border-border-dark rounded-xl overflow-hidden shadow-2xl">
-          <table className="w-full text-left border-collapse">
+        <div className="bg-panel-dark border border-border-dark rounded-xl overflow-x-auto shadow-2xl">
+          <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
               <tr className="bg-canvas-dark/50 border-b border-border-dark">
                 <th className="px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Patient ID</th>

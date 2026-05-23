@@ -3,7 +3,6 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import PatientCohort from './pages/PatientCohort';
 import SystemDiagnostics from './pages/SystemDiagnostics';
-import Presentation from './pages/Presentation';
 
 function App() {
   return (
@@ -14,7 +13,6 @@ function App() {
           <Route path="cohort" element={<PatientCohort />} />
           <Route path="diagnostics" element={<SystemDiagnostics />} />
         </Route>
-        <Route path="presentation" element={<Presentation />} />
       </Routes>
     </BrowserRouter>
   );

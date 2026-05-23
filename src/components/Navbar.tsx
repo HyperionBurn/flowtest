@@ -17,23 +17,11 @@ export default function Navbar() {
           <NavLink to="/" className={({isActive}) => `px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-light tracking-wide transition-colors shrink-0 ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Dashboard</NavLink>
           <NavLink to="/cohort" className={({isActive}) => `px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-light tracking-wide transition-colors shrink-0 ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Cohort</NavLink>
           <NavLink to="/diagnostics" className={({isActive}) => `px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-light tracking-wide transition-colors shrink-0 ${isActive ? 'bg-canvas-dark text-white' : 'text-gray-400 hover:text-white'}`}>Diagnostics</NavLink>
-          <NavLink to="/presentation" className={({isActive}) => `px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-light tracking-wide transition-all duration-300 flex items-center gap-1.5 shrink-0 ${isActive ? 'bg-canvas-dark text-cyan-400 border border-cyan-500/20 shadow-[0_0_12px_rgba(34,211,238,0.15)]' : 'text-gray-400 hover:text-white'}`}>
-            <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse shrink-0" />
-            <span className="shrink-0">Pitch</span>
-          </NavLink>
+          {/* Pitch Link Removed */}
         </nav>
       </div>
 
-      <div className="flex items-center gap-6">
-        <div className="text-[10px] font-mono text-gray-500 tracking-widest uppercase hidden md:block">
-          2026 HSIL CLINICAL INTERFACE
-        </div>
-        <div className="flex items-center gap-2.5 bg-canvas-dark border border-border-dark px-4 py-1.5 rounded-full shadow-inner hidden sm:flex">
-          <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
-          <Cpu className="w-3 h-3 text-gray-400" />
-          <span className="text-[10px] font-mono font-light text-gray-300 tracking-wider">NVIDIA Modulus Core Active</span>
-        </div>
-      </div>
+      {/* Right-side elements (HSIL and NVIDIA Modulus) removed */}
     </header>
   );
 }

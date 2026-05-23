@@ -8,7 +8,15 @@ const NUM_POINTS = 8000;
 
 export default function ArteryModel() {
   const pointsRef = useRef<THREE.Points>(null);
-  const { severity, velocity, mode, pinnHistory, currentPlaybackEpoch } = useAppStore();
+  const { 
+    severity, 
+    velocity, 
+    mode, 
+    pinnHistory, 
+    currentPlaybackEpoch, 
+    stentApplied, 
+    postStentResults 
+  } = useAppStore();
 
   // 1. Create constant base attributes for particles
   const { baseTheta, baseR, geometry } = useMemo(() => {
@@ -40,12 +48,14 @@ export default function ArteryModel() {
     return geo;
   }, []);
 
+  const activeHistory = stentApplied && postStentResults ? postStentResults.results.training_history : pinnHistory;
+
   // Memoize the active training snapshot for performance
   const currentSnapshot = useMemo(() => {
-    if (!pinnHistory || pinnHistory.length === 0) return null;
-    return pinnHistory.find((h: PinnTrainingSnapshot) => h.epoch === currentPlaybackEpoch) || 
-           pinnHistory[pinnHistory.length - 1];
-  }, [pinnHistory, currentPlaybackEpoch]);
+    if (!activeHistory || activeHistory.length === 0) return null;
+    return activeHistory.find((h: PinnTrainingSnapshot) => h.epoch === currentPlaybackEpoch) || 
+           activeHistory[activeHistory.length - 1];
+  }, [activeHistory, currentPlaybackEpoch]);
 
   // Memoize velocity and pressure bounds for dynamic color scaling
   const velocityBounds = useMemo(() => {
@@ -67,7 +77,7 @@ export default function ArteryModel() {
     const positions = geometry.attributes.position.array as Float32Array;
     const colors = geometry.attributes.color.array as Float32Array;
 
-    const s = severity / 100.0;
+    const s = stentApplied ? 0.10 : severity / 100.0;
     const r0 = 8.0; // Base reference radius
     const time = state.clock.getElapsedTime();
 

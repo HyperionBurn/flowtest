@@ -13,14 +13,17 @@ try:
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(HOST, username=USER, pkey=key, timeout=10)
     
-    print("SSH Connected! Running python command to check CUDA/ROCm...")
-    stdin, stdout, stderr = client.exec_command("python3 -c \"import torch; print('CUDA/ROCm Available:', torch.cuda.is_available()); print('Device Name:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'None')\"")
+    print("SSH Connected! Querying active servers on VPS...")
+    cmd = "pgrep -l uvicorn; pgrep -l cloudflared; cat /root/cardioflow/tunnel.log | grep -o 'https://.*trycloudflare.com'"
+    stdin, stdout, stderr = client.exec_command(cmd)
     out = stdout.read().decode().strip()
     err = stderr.read().decode().strip()
     
-    print("STDOUT:", out)
+    print("STDOUT:")
+    print(out)
     if err:
-        print("STDERR:", err)
+        print("STDERR:")
+        print(err)
         
     client.close()
 except Exception as e:

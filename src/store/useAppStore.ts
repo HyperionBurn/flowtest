@@ -86,6 +86,11 @@ interface AppState {
   currentPlaybackEpoch: number;
   isPlaybackPlaying: boolean;
   playbackSpeed: number;
+
+  // Stenting State
+  stentApplied: boolean;
+  isStentExecuting: boolean;
+  postStentResults: AnalyzeResponse | null;
   
   // Actions
   setPhase: (phase: 'input' | 'simulation') => void;
@@ -115,6 +120,11 @@ interface AppState {
   setBackendResults: (results: AnalyzeResponse) => void;
   finishExecution: (results: AnalyzeResponse) => void;
   resetExecution: () => void;
+  
+  setStentApplied: (val: boolean) => void;
+  setPostStentResults: (results: AnalyzeResponse | null) => void;
+  setIsStentExecuting: (val: boolean) => void;
+  triggerStenting: () => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -143,6 +153,10 @@ export const useAppStore = create<AppState>((set) => ({
   currentPlaybackEpoch: 200,
   isPlaybackPlaying: false,
   playbackSpeed: 50,
+  
+  stentApplied: false,
+  isStentExecuting: false,
+  postStentResults: null,
 
   setPhase: (activePhase) => set({ activePhase }),
   setDicomUploaded: (dicomUploaded) => set({ dicomUploaded }),
@@ -165,6 +179,42 @@ export const useAppStore = create<AppState>((set) => ({
   setCurrentPlaybackEpoch: (currentPlaybackEpoch) => set({ currentPlaybackEpoch }),
   setIsPlaybackPlaying: (isPlaybackPlaying) => set({ isPlaybackPlaying }),
   setPlaybackSpeed: (playbackSpeed) => set({ playbackSpeed }),
+
+  setStentApplied: (stentApplied) => set({ stentApplied }),
+  setPostStentResults: (postStentResults) => set({ postStentResults }),
+  setIsStentExecuting: (isStentExecuting) => set({ isStentExecuting }),
+  triggerStenting: async () => {
+    const { dicomFile, age, sex, bp, totalCholesterol, hdl, isSmoker, hasDiabetes, velocity } = useAppStore.getState();
+    if (!dicomFile) return;
+
+    set({ isStentExecuting: true });
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'https://highlighted-prev-elected-isolated.trycloudflare.com';
+      const formData = new FormData();
+      formData.append("file", dicomFile);
+      formData.append("patient_age", String(age));
+      formData.append("patient_sex", sex);
+      formData.append("bp_systolic", String(bp));
+      formData.append("total_cholesterol", String(totalCholesterol));
+      formData.append("hdl", String(hdl));
+      formData.append("is_smoker", String(isSmoker));
+      formData.append("has_diabetes", String(hasDiabetes));
+      formData.append("lesion_severity", "10"); // stent expands vessel (10% residual stenosis)
+      formData.append("aortic_velocity", String(velocity));
+
+      const res = await fetch(`${API_URL}/api/v1/analyze-scan`, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!res.ok) throw new Error(`Backend error: ${res.status}`);
+      const data = await res.json();
+      set({ postStentResults: data, stentApplied: true, isStentExecuting: false });
+    } catch (err) {
+      console.error("Virtual stenting failed:", err);
+      set({ isStentExecuting: false });
+    }
+  },
 
   startExecution: () => {
     set({ isExecuting: true, pipelineProgress: 0, pipelineStatus: 'Uploading DICOM to FastAPI Engine...' });
@@ -204,6 +254,9 @@ export const useAppStore = create<AppState>((set) => ({
     backendResults: null,
     pinnHistory: null,
     currentPlaybackEpoch: 200,
-    isPlaybackPlaying: false
+    isPlaybackPlaying: false,
+    stentApplied: false,
+    isStentExecuting: false,
+    postStentResults: null
   })
 }));

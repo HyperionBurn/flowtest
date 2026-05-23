@@ -259,10 +259,13 @@ def main():
     torch.save(output, args.output)
     print(f"Inference outputs successfully saved to {args.output}")
 
-def run_local_inference(graph_data: dict, weights_path: str = None) -> dict:
+def run_local_inference(graph_data: dict, weights_path: str = None, device_str: str = "cpu") -> dict:
     """
-    Runs PIGNNv2 GNN inference locally on the CPU.
+    Runs PIGNNv2 GNN inference locally on the specified device.
     """
+    import time
+    t_start = time.perf_counter()
+
     if weights_path is None:
         # Default local weights path in backend
         weights_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "weights", "pignn_pccac.pt")
@@ -270,8 +273,12 @@ def run_local_inference(graph_data: dict, weights_path: str = None) -> dict:
             # Fallback candidate
             weights_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "weights", "pignn_ffr_model.pt")
 
-    # Reconstruct tensors on CPU
-    device = torch.device("cpu")
+    if device_str == "cuda" and not torch.cuda.is_available():
+        device_str = "cpu"
+
+    device = torch.device(device_str)
+    
+    # Reconstruct tensors on target device
     node_features = torch.as_tensor(graph_data['node_features'], dtype=torch.float32, device=device)
     edge_index = torch.as_tensor(graph_data['edge_index'], dtype=torch.long, device=device)
     edge_attr = torch.as_tensor(graph_data['edge_attr'], dtype=torch.float32, device=device)
@@ -307,14 +314,16 @@ def run_local_inference(graph_data: dict, weights_path: str = None) -> dict:
         out = model(node_features, edge_index, edge_attr)
         p_pred, p_logvar, Q_pred, alpha_pred, beta_pred = out
 
+    t_duration = time.perf_counter() - t_start
+
     return {
         'success': True,
         'p_pred': p_pred.cpu().numpy(),
         'Q_pred': Q_pred.cpu().numpy(),
         'alpha_pred': alpha_pred.cpu().numpy(),
         'beta_pred': beta_pred.cpu().numpy(),
-        'execution_mode': 'local_cpu',
-        'duration_sec': 0.15
+        'execution_mode': 'local_gpu' if device.type == 'cuda' else 'local_cpu',
+        'duration_sec': t_duration
     }
 
 if __name__ == '__main__':

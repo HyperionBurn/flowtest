@@ -1,6 +1,5 @@
 import os
 import tempfile
-import paramiko
 import torch
 import time
 
@@ -19,6 +18,7 @@ def run_remote_inference(graph_data: dict) -> dict:
     If the connection fails or an exception occurs, raises RuntimeError so the caller
     can fall back to local CPU execution.
     """
+    import paramiko
     t_start = time.perf_counter()
     
     # 1. Create temporary files

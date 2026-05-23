@@ -37,6 +37,31 @@ export default function SidebarControl() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  const loadDemoScan = async () => {
+    try {
+      setDicomError(null);
+      const res = await fetch('/demo_scan.dcm');
+      if (!res.ok) throw new Error('Demo DICOM file not found on server');
+      const blob = await res.blob();
+      const file = new File([blob], 'demo_scan.dcm', { type: 'application/octet-stream' });
+      
+      const metadata = await extractDicomMetadata(file);
+
+      if (metadata.success) {
+        if (metadata.age) setAge(metadata.age);
+        if (metadata.sex) setSex(metadata.sex);
+        if (metadata.imageUrl) setDicomImageUrl(metadata.imageUrl);
+        setDicomFile(file);
+        setDicomUploaded(true);
+      } else {
+        setDicomError(metadata.error || 'Failed to parse demo DICOM file');
+      }
+    } catch (err) {
+      console.error(err);
+      setDicomError(err instanceof Error ? err.message : 'Failed to load demo scan');
+    }
+  };
+
   return (
     <aside className="w-[420px] bg-[#121212]/95 backdrop-blur-xl border-r border-border-dark flex flex-col h-full shrink-0 z-10 relative">
       <div className="p-8 flex-1 flex flex-col gap-10 overflow-y-auto custom-scrollbar font-light">
@@ -89,6 +114,19 @@ export default function SidebarControl() {
               </div>
             )}
           </div>
+
+          {!dicomUploaded && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                loadDemoScan();
+              }}
+              className="w-full py-2.5 px-4 bg-cyan-950/20 hover:bg-cyan-950/40 border border-cyan-500/20 hover:border-cyan-400/50 rounded-xl text-xs font-light text-cyan-300 tracking-widest uppercase transition-all duration-300 shadow-sm"
+            >
+              Use Demo Scan (demo_scan.dcm)
+            </button>
+          )}
           
           {dicomError && (
             <div className="flex items-start gap-2 mt-2 text-red-400 bg-red-950/30 p-2.5 rounded-lg border border-red-900/50">
